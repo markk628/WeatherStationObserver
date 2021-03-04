@@ -58,9 +58,9 @@ class CurrentConditionsDisplay(Observer):
         self.display()
         
     def display(self):
-        print("Current conditions:", self.temperature, 
-              "°F and", self.humidity, "% humidity",
-              self.pressure, "inHg pressure")
+        print("Current conditions: Temp: %s°F  Humidity: %s%% Pressure: %sinHg" % (self.temperature,
+                                                                                    self.humidity,
+                                                                                    self.pressure))
         
 
 class StatisticsDisplay(Observer):
@@ -86,7 +86,6 @@ class StatisticsDisplay(Observer):
             values = self.humidities
             measurement = "Humidity"
         else:
-            units = "inHg"
             values = self.pressures
             measurement = "Pressure"
         
@@ -107,9 +106,9 @@ class StatisticsDisplay(Observer):
         else:
             print("No humidity stats")
         if self.pressures:
-            print(self.get_stats(""), '\n')
+            print(self.get_stats("inHg"), "\n")
         else:
-            print("No pressure stats", '\n')
+            print("No pressure stats", "\n")
 
 
 class ForecastDisplay(Observer):
@@ -138,14 +137,16 @@ class WeatherStation:
     def main(self):
         weather_data = WeatherData()
         current_display = CurrentConditionsDisplay(weather_data)
-        stats_display = StatisticsDisplay(weather_data)
         forecast_display = ForecastDisplay(weather_data)
+        stats_display = StatisticsDisplay(weather_data)
         
         weather_data.setMeasurements(80, 65,30.4)
         weather_data.setMeasurements(82, 70,29.2)
         weather_data.setMeasurements(78, 90,29.2)
         
         weather_data.removeObserver(current_display)
+        weather_data.removeObserver(forecast_display)
+        weather_data.removeObserver(stats_display)
         weather_data.setMeasurements(120, 100,1000)
     
         
